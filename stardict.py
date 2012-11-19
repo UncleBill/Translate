@@ -21,7 +21,18 @@ class Dict(object):
         if not self.isload:
             self._load(self.dictdir)
             self.isload = True
-        item = self._get_index(word)
+        if self._get_index(word):
+            item = self._get_index(word)
+        elif word.endswith('ies'):                  # 'ies' > 'es' > 's'
+            item = self._get_index(word[:-3]+'y')   # suffix "s"
+        elif word.endswith('es') or word.endswith( 'ed'):
+            item = self._get_index(word[:-2])
+        elif word.endswith('s'):                   
+            item = self._get_index(word[:-1])
+        elif word.endswith('ing'):
+            item = self._get_index(word[:-3])
+        else: 
+            item = None
         text = self._query(item[0], item[1]) if item else 'not found'
         return text        
 
